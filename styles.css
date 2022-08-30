@@ -1,0 +1,28 @@
+.searchWrapper{
+    display: flex;
+    flex-direction: column;
+}
+.searchWrapper label{
+margin-bottom: 1rem;    
+}
+
+.searchWrapper input{
+    margin: 1rem;
+}
+body{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+}
+.card{
+    border: solid;
+    margin:1rem;
+    padding: 1.5rem;
+}
