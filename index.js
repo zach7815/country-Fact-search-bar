@@ -45,8 +45,9 @@ const loadCountries= async()=>{ await fetch(apiEndpoint,
         countryDetails.countryFlag.src=country.flags.png;
         countryDetails.officialName.textContent=`Official Name: ${country.name.official}`;
         countryDetails.population.textContent=`population: ${country.population}`;
-        countryDetails.capitalCity.textContent= `capital: ${country.capital[0]}`
-        
+        countryDetails.capitalCity.textContent= `capital: ${country.capital}`
+        countryDetails.currencyName.textContent=`currency: ${country.currencies.EUR||{}.name}`
+        countryDetails.continent.textContent=`continent: ${country.continents}`
         
 
         countryCardsContainer.append(card)
