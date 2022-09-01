@@ -8,12 +8,12 @@ const searchInput = document.querySelector('[data-search]')
 
 let places=[];
 searchInput.addEventListener("input", (e)=>{
-    const value=e.target.value
+    const value=e.target.value.toLowerCase()
     console.log(value)
 places.forEach( country=>{
 
-   let isVisible=country.name.includes(value)||country.officialName.includes(value)
-   country.card.classList.toggle("hidden", isVisible);
+   let isVisible=country.name.toLowerCase().includes(value)||country.officialName.toLowerCase().includes(value)
+   country.element.classList.toggle("hidden", !isVisible);
 }
 )
  
@@ -77,7 +77,8 @@ const loadCountries= async()=>{ await fetch(apiEndpoint,
             name:countryDetails.countryName.textContent,
             officialName:countryDetails.officialName.textContent,
             capital:countryDetails.capitalCity.textContent,
-            continent:countryDetails.continent.textContent
+            continent:countryDetails.continent.textContent,
+            element:card,
         }
         places.push(countryFilters);
 
