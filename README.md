@@ -30,7 +30,7 @@ Finally, the current version only shows 180 countries of the possible 250 return
 ![](images/Mobile-View.png)
 
 ### Link
-- Live Site URL: [Add live site URL here](https://zach7815.github.io/country-Fact-search-bar/)
+ [Live site](https://zach7815.github.io/country-Fact-search-bar/)
 
 ## My process
 This project was originally based off a tutorial based by webdev simplified. However, I have modified it to use a different API. The API data is more complex that the tutorial and is harder to access and display. This project therefore
