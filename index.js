@@ -34,62 +34,59 @@ randomCountryBtn.addEventListener("click", ()=>{
 let randomCountry=randomInt();
 
 
-const loadCountries= async()=>{ await fetch(apiEndpoint, 
+const loadCountries= async()=>{
+    const response = await fetch(apiEndpoint, 
     {
+        method:"GET",
         mode: 'cors',
         headers: {
           'Access-Control-Allow-Origin':'*'
         }
     })
-.then(response=>{
+
     if(!response.ok){
-        throw response.status
+        throw new Error(`HTTP error! status: ${response.status}`)
     }
 
-   return response.json()
-})
-.then(data=>{
-  data.map(country => {
-        const card= countryTemplate.content.cloneNode(true).children[0]
-        const countryDetails ={
-            countryName: card.querySelector("[data-country-header]"),
-            countryFlag:card.querySelector("[data-country-flag]"),
-            officialName:card.querySelector("[data-country-official-name]"),
-            population:card.querySelector("[data-population]"),
-            capitalCity:card.querySelector("[data-capital-city]"),
-            currencyName:card.querySelector("[data-currency-name]"),
-            currencySymbol:card.querySelector("[data-currency-symbol]"),
-            continent: card.querySelector("[data-continent]")
-        }
-        countryDetails.countryName.textContent=country.name.common;
-        countryDetails.countryFlag.src=country.flags.png;
-        countryDetails.officialName.textContent=`Official Name: ${country.name.official}`;
-        countryDetails.population.textContent=`population: ${country.population}`;
-        countryDetails.capitalCity.textContent= `capital: ${country.capital}`;
-        countryDetails.continent.textContent=`continent: ${country.continents}`;
+    const data = await response.json()
+    data.map(country => {
+                const card= countryTemplate.content.cloneNode(true).children[0]
+                console.log(country)
+                const {name, officialName, flag, population, capital, currencyName,currencySymbol}=country;
+                console.log(name.common);
 
-      const currencyKey=Object.keys(null||country.currencies);
-      currencyKey.map(key=>{
-       countryDetails.currencyName.textContent=  `Currency Name: ${country.currencies[key].name}`
-       countryDetails.currencySymbol.textContent=   `Currency Symbol: ${country.currencies[key].symbol}`
-   
-      })
-        countryCardsContainer.append(card)
-        const countryFilters={
-            name:countryDetails.countryName.textContent,
-            officialName:countryDetails.officialName.textContent,
-            capital:countryDetails.capitalCity.textContent,
-            continent:countryDetails.continent.textContent,
-            element:card,
-        }
-        places.push(countryFilters)
-    });
-})
+                const cardTemplate =`
+                <div class="card">
+                <h3 class="commonName">${name.common}</h3>
+                <img src="${flag}"  alt="">
+                <h4 class="officialName">${officialName} </h4>
+                <p>${population} </p>
+                <p>${capital} </p>
+                <p>${currencyName}</p>
+                <p>${currencySymbol} </p>
+            </div>
+                `
 
-.catch(err=>console.log(err));
+            
+  
+        
+            //   const currencyKey=Object.keys(null||country.currencies);
+            //   currencyKey.map(key=>{
+            //    countryDetails.currencyName.textContent=  `Currency Name: ${country.currencies[key].name}`
+            //    countryDetails.currencySymbol.textContent=   `Currency Symbol: ${country.currencies[key].symbol}`
+           
+            //   })
+            //     countryCardsContainer.append(card)
+            //     const countryFilters={
+            //         name:countryDetails.countryName.textContent,
+            //         officialName:countryDetails.officialName.textContent,
+            //         capital:countryDetails.capitalCity.textContent,
+            //         continent:countryDetails.continent.textContent,
+            //         element:card,
+            //     }
+            //     places.push(countryFilters)
+            });
 };
 
-
-
-
 loadCountries();
+
