@@ -1,28 +1,37 @@
 
 const apiEndpoint = `https://restcountries.com/v3.1/all`;
-const countryTemplate= document.querySelector("[data-country-template]")
-const randomInt = (max)=>{ return Math.floor(Math.random()*max)}
-const countryCardsContainer= document.querySelector("[data-country-cards-container]")
-const searchInput = document.querySelector('[data-search]')
-
+const countryTemplate= document.querySelector("[data-country-template]");
+const countryCardsContainer= document.querySelector("[data-country-cards-container]");
+const searchInput = document.querySelector('[data-search]');
+const randomCountryBtn = document.querySelector('#random');
 
 let places=[];
-searchInput.addEventListener("input", (e)=>{
-    const value=e.target.value.toLowerCase()
-    console.log(value)
-places.forEach( country=>{
 
-   let isVisible=country.name.toLowerCase().includes(value)||country.officialName.toLowerCase().includes(value)
-   country.element.classList.toggle("hidden", !isVisible);
-}
-)
- 
+const filterCountry= (countrysArray, targetCountry)=>{
+    countrysArray.forEach(country=>{
+        let isVisible=country.name.toLowerCase().includes(targetCountry)||country.officialName.toLowerCase().includes(targetCountry)
+        country.element.classList.toggle("hidden", !isVisible);
+     }
+    )};
+
+ const randomInt = (max)=>{ return Math.floor(Math.random()*max)};
+
+searchInput.addEventListener("input", (e)=>{
+    const userInput =e.target.value.toLowerCase()
+    filterCountry(places,userInput);
+});
+
+
+
+randomCountryBtn.addEventListener("click", ()=>{
+   let randNumber=randomInt(180);
+   let randomCountry=places[randNumber].name.toLowerCase();
+   console.log(randomCountry);
+   filterCountry(places,randomCountry);
    
     
 })
-
-
-
+let randomCountry=randomInt();
 
 
 const loadCountries= async()=>{ await fetch(apiEndpoint, 
@@ -40,12 +49,7 @@ const loadCountries= async()=>{ await fetch(apiEndpoint,
    return response.json()
 })
 .then(data=>{
-  
-     places= data.map(country => {
-      
-      
-      
-      
+  data.map(country => {
         const card= countryTemplate.content.cloneNode(true).children[0]
         const countryDetails ={
             countryName: card.querySelector("[data-country-header]"),
@@ -57,8 +61,6 @@ const loadCountries= async()=>{ await fetch(apiEndpoint,
             currencySymbol:card.querySelector("[data-currency-symbol]"),
             continent: card.querySelector("[data-continent]")
         }
-        
-    
         countryDetails.countryName.textContent=country.name.common;
         countryDetails.countryFlag.src=country.flags.png;
         countryDetails.officialName.textContent=`Official Name: ${country.name.official}`;
@@ -80,11 +82,14 @@ const loadCountries= async()=>{ await fetch(apiEndpoint,
             continent:countryDetails.continent.textContent,
             element:card,
         }
-        places.push(countryFilters);
-
+        places.push(countryFilters)
     });
 })
+
 .catch(err=>console.log(err));
 };
+
+
+
 
 loadCountries();
