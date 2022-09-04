@@ -51,40 +51,46 @@ const loadCountries= async()=>{
     const data = await response.json()
     data.map(country => {
                 const card= countryTemplate.content.cloneNode(true).children[0]
-                console.log(country)
-                const {name, officialName, flag, population, capital, currencyName,currencySymbol}=country;
-                console.log(name.common);
+                const propList= ["name", "flags", "population", "capital", "currencies"];
+                const hasProps=[];
+                const hasProperties =(object, propList)=>{
+                    return propList.forEach(prop=>{
+                        return object.hasOwnProperty(prop)?hasProps.push(prop):hasProps.push(null);
+                    })
+                }
+               hasProperties(country,propList);
+               const existingProps=hasProps.filter(prop=>prop!==null);
 
-                const cardTemplate =`
-                <div class="card">
-                <h3 class="commonName">${name.common}</h3>
-                <img src="${flag}"  alt="">
-                <h4 class="officialName">${officialName} </h4>
-                <p>${population} </p>
-                <p>${capital} </p>
-                <p>${currencyName}</p>
-                <p>${currencySymbol} </p>
-            </div>
-                `
+               const countryProps = []
+                
+               existingProps.forEach(propName=> countryProps.push(country[propName]));
+               console.log(countryProps);
 
-            
-  
+
+            //     const {name, officialName, flags, population, capital, currencies}=country;
         
-            //   const currencyKey=Object.keys(null||country.currencies);
-            //   currencyKey.map(key=>{
-            //    countryDetails.currencyName.textContent=  `Currency Name: ${country.currencies[key].name}`
-            //    countryDetails.currencySymbol.textContent=   `Currency Symbol: ${country.currencies[key].symbol}`
-           
-            //   })
-            //     countryCardsContainer.append(card)
-            //     const countryFilters={
-            //         name:countryDetails.countryName.textContent,
-            //         officialName:countryDetails.officialName.textContent,
-            //         capital:countryDetails.capitalCity.textContent,
-            //         continent:countryDetails.continent.textContent,
-            //         element:card,
-            //     }
-            //     places.push(countryFilters)
+
+            //     let currencyKey=Object.keys(currencies);
+               
+
+                
+            // const renderCard=(countryName, officialName, flagSrc,population,capital,currencyName, currencySymbol)=>{
+            //     const cardTemplate =`
+            //     <div class="card">
+            //     <h3 class="commonName">${countryName}</h3>
+            //     <img src="${flagSrc}"  alt="">
+            //     <h4 class="officialName">${officialName} </h4>
+            //     <p>${population} </p>
+            //     <p>${capital} </p>
+            //     <p>${currencyName} </p>
+                
+            // </div>
+            //     `
+            //     return cardTemplate
+            // }
+              
+
+     
             });
 };
 
