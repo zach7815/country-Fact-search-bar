@@ -116,7 +116,7 @@ transform: translateY(4px);
     #random{
         align-self: center;
         transform: translateY(6px);
-
+        width: 10rem;
         
 
     }
