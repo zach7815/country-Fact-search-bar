@@ -1,8 +1,5 @@
 
 const apiEndpoint = `https://restcountries.com/v3.1/all`;
-const countryTemplate= document.querySelector("[data-country-template]");
-const countryCardsContainer= document.querySelector("[data-country-cards-container]");
-const searchInput = document.querySelector('[data-search]');
 const randomCountryBtn = document.querySelector('#random');
 
 let places=[];
@@ -16,21 +13,20 @@ const filterCountry= (countrysArray, targetCountry)=>{
 
  const randomInt = (max)=>{ return Math.floor(Math.random()*max)};
 
-searchInput.addEventListener("input", (e)=>{
-    const userInput =e.target.value.toLowerCase()
-    filterCountry(places,userInput);
-});
+// searchInput.addEventListener("input", (e)=>{
+//     const userInput =e.target.value.toLowerCase()
+//     filterCountry(places,userInput);
+// });
 
 
 
 randomCountryBtn.addEventListener("click", ()=>{
-   let randNumber=randomInt(180);
+   let randNumber=randomInt(250);
    let randomCountry=places[randNumber].name.toLowerCase();
    console.log(randomCountry);
-   filterCountry(places,randomCountry);
-   
-    
+   filterCountry(places,randomCountry); 
 })
+
 let randomCountry=randomInt();
 
 
@@ -43,29 +39,45 @@ const loadCountries= async()=>{
           'Access-Control-Allow-Origin':'*'
         }
     })
+    .then(response=>{const data=response.json()})
+    .then((data)=>console.log(data))
+    
 
-    if(!response.ok){
-        throw new Error(`HTTP error! status: ${response.status}`)
-    }
 
-    const data = await response.json()
-    data.map(country => {
-                const card= countryTemplate.content.cloneNode(true).children[0]
-                const propList= ["name", "flags", "population", "capital", "currencies"];
-                const hasProps=[];
-                const hasProperties =(object, propList)=>{
-                    return propList.forEach(prop=>{
-                        return object.hasOwnProperty(prop)?hasProps.push(prop):hasProps.push(null);
-                    })
-                }
-               hasProperties(country,propList);
-               const existingProps=hasProps.filter(prop=>prop!==null);
 
-               const countryProps = []
+
+};
+
+loadCountries();
+
+
+    // if(!response.ok){
+    //     throw new Error(`HTTP error! status: ${response.status}`)
+    // }
+
+    // const data = await response.json()
+    // data.map(country => {
+    //             const card= countryTemplate.content.cloneNode(true).children[0]
+    //             const propList= ["name", "flags", "population", "capital", "currencies"];
+    //             const hasProps=[];
+    //             const hasProperties =(object, propList)=>{
+    //                 return propList.forEach(prop=>{
+    //                     return object.hasOwnProperty(prop)?hasProps.push(prop):hasProps.push(null);
+    //                 })
+    //             }
+    //            hasProperties(country,propList);
+    //            const existingProps=hasProps.filter(prop=>prop!==null);
+
+    //            const countryProps = {
+    //             name:"",
+    //             flags:"",
+    //             population: "",
+    //             capital:"",
+    //             currencies:""
+    //            }
                 
-               existingProps.forEach(propName=> countryProps.push(country[propName]));
-               console.log(countryProps);
-
+    //            existingProps.forEach(propName=> countryProps.push(country[propName]));
+         
 
             //     const {name, officialName, flags, population, capital, currencies}=country;
         
@@ -91,8 +103,4 @@ const loadCountries= async()=>{
               
 
      
-            });
-};
-
-loadCountries();
-
+            // });
