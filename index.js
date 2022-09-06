@@ -1,28 +1,36 @@
 
 const apiEndpoint = `https://restcountries.com/v3.1/all`;
 const randomCountryBtn = document.querySelector('#random');
+const cardContainer = document.querySelector(".container");
+const searchInput = document.querySelector('[data-search]');
 
 let places=[];
 
-const filterCountry= (countrysArray, targetCountry)=>{
-    countrysArray.forEach(country=>{
-        let isVisible=country.name.toLowerCase().includes(targetCountry)||country.officialName.toLowerCase().includes(targetCountry)
-        country.element.classList.toggle("hidden", !isVisible);
-     }
-    )};
+const filterCountry= (targetCountry)=>{
+    const elements = document.querySelectorAll('div');
+    elements.forEach(countryDiv=>{
+        const countryClassList = countryDiv.classList;
+        console.log(countryClassList.contains(targetCountry))
+        // isVisible= countryClassList.includes(targetCountry);
+        // countryDiv.classList.toggle("hidden", !isVisible);
+    })
+   
+    };
+
 
  const randomInt = (max)=>{ return Math.floor(Math.random()*max)};
 
-// searchInput.addEventListener("input", (e)=>{
-//     const userInput =e.target.value.toLowerCase()
-//     filterCountry(places,userInput);
-// });
+searchInput.addEventListener("input", (e)=>{
+    const userInput =e.target.value.toLowerCase()
+    console.log(userInput)
+    filterCountry(userInput);
+});
 
 
 
 randomCountryBtn.addEventListener("click", ()=>{
    let randNumber=randomInt(250);
-   let randomCountry=places[randNumber].name.toLowerCase();
+   let randomCountry=places[randNumber].toLowerCase();
    console.log(randomCountry);
    filterCountry(places,randomCountry); 
 })
@@ -31,7 +39,7 @@ let randomCountry=randomInt();
 
 
 const loadCountries= async()=>{
-    const response = await fetch(apiEndpoint, 
+     await fetch(apiEndpoint, 
     {
         method:"GET",
         mode: 'cors',
@@ -39,8 +47,63 @@ const loadCountries= async()=>{
           'Access-Control-Allow-Origin':'*'
         }
     })
-    .then(response=>{const data=response.json()})
-    .then((data)=>console.log(data))
+    .then(response=>{ 
+       return  response.json()
+       
+    })
+    .then(data=>{
+       const countries=data;
+
+
+
+
+       let result = ""
+
+
+      countries.map((country)=>{
+        const {name, flags, population, capital}=country;
+
+           let currencyKey=""
+           let currency =""
+            let currencySymbol=""
+           
+            if(country.currencies){
+                currencyKey=Object.keys(country.currencies)
+                currencyKey.map(key=>{
+                   currency=   country.currencies[key].name
+                   currencySymbol=country.currencies[key].symbol
+
+     
+                   
+                       })
+            }
+            else{
+                currencyKey="no currency"
+            }
+           
+       result+= `<div class="card ${name.official} ${name.common}" >
+            <h2>${name.common}</h2>
+            <img src="${flags.png}" alt="a flag for the country of ${name.common}">
+            <p>${name.official}</p>
+            <p>${population}</p>
+            <p>${capital===undefined?"no capital":capital}</p>
+            <p>${currency}</p>
+            <p>${currencySymbol}</p>
+        </div>`
+     
+
+
+     cardContainer.innerHTML=result;
+     places.push([name.common, name.official])
+       
+       })
+      
+    }).catch((error)=>{
+        console.log(Error(error))
+    })
+   
+    console.log(places)
+   
     
 
 
