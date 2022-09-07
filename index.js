@@ -101,8 +101,6 @@ result+=card;
     }).catch((error)=>{
        console.log(error);
     });
-
-
 };
 clearInput()
 loadCountries();
