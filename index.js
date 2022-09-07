@@ -6,24 +6,24 @@ const searchInput = document.querySelector('[data-search]');
 
 let places=[];
 
-const filterCountry= (targetCountry)=>{
-    const elements = document.querySelectorAll('div');
-    elements.forEach(countryDiv=>{
-        const countryClassList = countryDiv.classList;
-        console.log(countryClassList.contains(targetCountry))
-        // isVisible= countryClassList.includes(targetCountry);
-        // countryDiv.classList.toggle("hidden", !isVisible);
-    })
-   
-    };
+const filterCountry= (countrysArray, targetCountry)=>{
+    countrysArray.forEach((country,index)=>{
+      let card= document.querySelectorAll(".card")
+    
+      country["element"]=card[index]
+      console.log(country)
+        let isVisible=country.commonName.toLowerCase().includes(targetCountry)||country.officialName.toLowerCase().includes(targetCountry)
+        country.element.classList.toggle("hidden", !isVisible);
+     }
+    )};
 
 
  const randomInt = (max)=>{ return Math.floor(Math.random()*max)};
 
 searchInput.addEventListener("input", (e)=>{
     const userInput =e.target.value.toLowerCase()
-    console.log(userInput)
-    filterCountry(userInput);
+   
+    filterCountry(places,userInput);
 });
 
 
@@ -81,7 +81,7 @@ const loadCountries= async()=>{
                 currencyKey="no currency"
             }
            
-       result+= `<div class="card ${name.official} ${name.common}" >
+       let card= `<div class="card ${name.official}" >
             <h2>${name.common}</h2>
             <img src="${flags.png}" alt="a flag for the country of ${name.common}">
             <p>${name.official}</p>
@@ -91,10 +91,18 @@ const loadCountries= async()=>{
             <p>${currencySymbol}</p>
         </div>`
      
-
+result+=card;
 
      cardContainer.innerHTML=result;
-     places.push([name.common, name.official])
+    const filterObject= {
+        commonName:name.common,
+        officialName:name.official,
+        element:result,
+
+    }
+
+
+     places.push(filterObject)
        
        })
       
