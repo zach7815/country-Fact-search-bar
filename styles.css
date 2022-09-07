@@ -17,6 +17,8 @@ h1{
 
 .searchWrapper{
     display: flex;
+    flex-direction: column;
+    align-items: center;
     
 }
 
@@ -29,10 +31,7 @@ h1{
     width:85%
 
 }
-.searchWrapper button{
-    align-self: center;
-    height:70%;
-}
+
 
 
 /* CSS */
@@ -60,6 +59,8 @@ h1{
   white-space: nowrap;
   z-index: 9;
   border: 0;
+  margin:0 0 1rem 0;
+  width: 50%;
 }
 
 #random:hover {
@@ -114,5 +115,19 @@ transform: translateY(4px);
     .searchWrapper{
         justify-content: space-around;
     }
+    .searchWrapper{
+        flex-direction: row;
+        justify-content: space-around;
+      
+        
+    }
+    #random{
+        align-self: center;
+        transform: translateY(6px);
+
+        
+
+    }
+
 }
 
