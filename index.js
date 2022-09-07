@@ -11,13 +11,14 @@ const filterCountry= (countrysArray, targetCountry)=>{
       let card= document.querySelectorAll(".card")
     
       country["element"]=card[index]
-      console.log(country)
         let isVisible=country.commonName.toLowerCase().includes(targetCountry)||country.officialName.toLowerCase().includes(targetCountry)
         country.element.classList.toggle("hidden", !isVisible);
      }
     )};
 
-
+const clearInput= ()=>{
+    searchInput.input="";
+}
  const randomInt = (max)=>{ return Math.floor(Math.random()*max)};
 
 searchInput.addEventListener("input", (e)=>{
@@ -26,18 +27,13 @@ searchInput.addEventListener("input", (e)=>{
     filterCountry(places,userInput);
 });
 
-
-
 randomCountryBtn.addEventListener("click", ()=>{
    let randNumber=randomInt(250);
-   let randomCountry=places[randNumber].toLowerCase();
-   console.log(randomCountry);
+   let randomCountry=places[randNumber].commonName.toLowerCase();
    filterCountry(places,randomCountry); 
 })
 
 let randomCountry=randomInt();
-
-
 const loadCountries= async()=>{
      await fetch(apiEndpoint, 
     {
@@ -53,41 +49,39 @@ const loadCountries= async()=>{
     })
     .then(data=>{
        const countries=data;
-
-
-
-
        let result = ""
-
-
       countries.map((country)=>{
-        const {name, flags, population, capital}=country;
+        const {name, flags, population, capital, continents}=country;
 
            let currencyKey=""
            let currency =""
             let currencySymbol=""
-           
+
+          
             if(country.currencies){
                 currencyKey=Object.keys(country.currencies)
                 currencyKey.map(key=>{
-                   currency=   country.currencies[key].name
-                   currencySymbol=country.currencies[key].symbol
-
-     
-                   
+                   currency=   country.currencies[key].name;
+                   currencySymbol=country.currencies[key].symbol;
                        })
             }
             else{
                 currencyKey="no currency"
             }
-           
+       
        let card= `<div class="card ${name.official}" >
             <h2>${name.common}</h2>
             <img src="${flags.png}" alt="a flag for the country of ${name.common}">
-            <p>${name.official}</p>
-            <p>${population}</p>
+            <h3>${name.official}</h3>
+            <h4> Continent</h4>
+            <p>${continents}</p>
+            <h4> Country Population</h4>
+            <p>${population.toLocaleString("en-US")}</p>
+            <h4> Capital City</h4>
             <p>${capital===undefined?"no capital":capital}</p>
+            <h4> Currency</h4>
             <p>${currency}</p>
+            <h4> Currency Symbol</h4>
             <p>${currencySymbol}</p>
         </div>`
      
@@ -100,78 +94,16 @@ result+=card;
         element:result,
 
     }
-
-
      places.push(filterObject)
        
        })
       
     }).catch((error)=>{
-        console.log(Error(error))
-    })
-   
-    console.log(places)
-   
-    
-
-
+       console.log(error);
+    });
 
 
 };
-
+clearInput()
 loadCountries();
 
-
-    // if(!response.ok){
-    //     throw new Error(`HTTP error! status: ${response.status}`)
-    // }
-
-    // const data = await response.json()
-    // data.map(country => {
-    //             const card= countryTemplate.content.cloneNode(true).children[0]
-    //             const propList= ["name", "flags", "population", "capital", "currencies"];
-    //             const hasProps=[];
-    //             const hasProperties =(object, propList)=>{
-    //                 return propList.forEach(prop=>{
-    //                     return object.hasOwnProperty(prop)?hasProps.push(prop):hasProps.push(null);
-    //                 })
-    //             }
-    //            hasProperties(country,propList);
-    //            const existingProps=hasProps.filter(prop=>prop!==null);
-
-    //            const countryProps = {
-    //             name:"",
-    //             flags:"",
-    //             population: "",
-    //             capital:"",
-    //             currencies:""
-    //            }
-                
-    //            existingProps.forEach(propName=> countryProps.push(country[propName]));
-         
-
-            //     const {name, officialName, flags, population, capital, currencies}=country;
-        
-
-            //     let currencyKey=Object.keys(currencies);
-               
-
-                
-            // const renderCard=(countryName, officialName, flagSrc,population,capital,currencyName, currencySymbol)=>{
-            //     const cardTemplate =`
-            //     <div class="card">
-            //     <h3 class="commonName">${countryName}</h3>
-            //     <img src="${flagSrc}"  alt="">
-            //     <h4 class="officialName">${officialName} </h4>
-            //     <p>${population} </p>
-            //     <p>${capital} </p>
-            //     <p>${currencyName} </p>
-                
-            // </div>
-            //     `
-            //     return cardTemplate
-            // }
-              
-
-     
-            // });
